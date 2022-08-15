@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ReflectionMoodAnalyser
 {
-    public class MoodAnalyseFactory
+    public class MoodAnalyserFactory
     {
         /// <summary>
         /// CreateMoodAnalyse method to create object of MoodAnalyse class.  
@@ -42,5 +42,34 @@ namespace ReflectionMoodAnalyser
                 throw new MoodAnalyserCustomException(MoodAnalyserCustomException.ExceptionType.NO_SUCH_METHOD, "Constructor is Not Found");
             }
         }
+
+        /// <summary>
+        /// UC-5 For parameterised constructor by pssing messge parameter to the class method
+        /// </summary>
+
+        public static object CreateMoodAnalyseUsingParameterizedConstructor(string className, string constructorName)
+        {
+            Type type = typeof(MoodAnalyser);
+            if (type.Name.Equals(className) || type.FullName.Equals(className))
+            {
+                if (type.Name.Equals(constructorName))
+                {
+                    ConstructorInfo construct = type.GetConstructor(new[] { typeof(string) });
+                    object instance = construct.Invoke(new object[] { "HAPPY" });
+                    return instance;
+                }
+
+                else
+                {
+                    throw new MoodAnalyserCustomException(MoodAnalyserCustomException.ExceptionType.NO_SUCH_METHOD, "Method not found");
+                }
+            }
+            else
+            {
+                throw new MoodAnalyserCustomException(MoodAnalyserCustomException.ExceptionType.NO_SUCH_CLASS, "Class not found");
+            }
+        }
+
     }
 }
+
